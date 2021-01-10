@@ -1,0 +1,23 @@
+{
+  "name": "Pathfinding-Visualizer",
+  "version": "1.0.0",
+  "description": "A visualization tool for pathfinding algorithms.",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "gh-pages -d src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fadiyousif/pathfinding-visualizer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fadiyousif/pathfinding-visualizer/issues"
+  },
+  "homepage": "https://fadiyousif.github.io/pathfinding-visualizer",
+  "dependencies": {
+    "gh-pages": "^3.1.0"
+  }
+}

@@ -5,8 +5,10 @@
 }
 
 body {
-    padding-top: 80px;
-    font-family: 'Lato', sans-serif;
+  padding-top: 80px;
+  font-family: 'Lato', sans-serif;
+  word-spacing: 0.05rem;
+  letter-spacing: 0.02rem;
 }
 
 .navbar {
