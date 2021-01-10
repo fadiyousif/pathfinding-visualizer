@@ -1,7 +1,7 @@
 # Pathfinding Visualizer
 A visualization tool for pathfinding algorithms.
 
-<img src="media/pathfinding.png" width="500">
+<img src="src/media/pathfinding.png" width="500">
 
 There is a set of problems in computer science that require us to find the shortest path between a set of points. The applications are numerous and commonplace — from satellite navigation to internet packet routing; even finding the shortest length of wire needed to connect pins on a circuit board is an example of a shortest path problem.
 
