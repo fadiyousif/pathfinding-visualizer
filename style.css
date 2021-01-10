@@ -1,0 +1,247 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding-top: 80px;
+  font-family: 'Lato', sans-serif;
+  word-spacing: 0.05rem;
+  letter-spacing: 0.02rem;
+}
+
+.navbar {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+#logo {
+	font-size: 30px;
+  transition: 0.3s color;
+  word-spacing: 0.3rem;
+  letter-spacing: 0.05rem;
+}
+
+#logo:hover {
+	cursor: default;
+	color: rgba(0, 217, 159, 0.75);
+}
+
+#navbarSupportedContent .btn:not(:last-of-type) {
+	margin-right: 10px;
+}
+
+.key {
+	width: 20px;
+  height: 20px;
+  margin-right: 10px;
+	border: 1px solid #79d9ce;
+}
+
+div.start,
+div.target {
+  border: none;
+}
+
+div.success {
+	background-color: #FFFE6A;
+}
+
+#tableContainer {
+	display: flex;
+	justify-content: center;
+  padding: 0 20px;
+  min-width: 900px;
+}
+
+td {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #79d9ce;
+}
+
+.wall {
+  border: none;
+  animation-name: wallAnimation;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes wallAnimation {
+  0% {
+    transform: scale(.3);
+    background-color: #0C3547;
+  }
+
+  50% {
+    transform: scale(1.1);
+    background-color: #0C3547;
+  }
+
+  100% {
+    transform: scale(1.0);
+    background-color: #0C3547;
+  }
+}
+
+.searching, 
+.visited {
+  animation-name: searchingAnimation;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes searchingAnimation {
+  0% {
+    transform: scale(0.3);
+    background-color: rgba(0, 0, 66, 0.75);
+    border-radius: 100%;
+  }
+
+  50% {
+    background-color: rgba(17, 104, 217, 0.75);
+  }
+
+  75% {
+    transform: scale(1.2);
+    background-color: rgba(0, 217, 159, 0.75);
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgba(0, 190, 218, 0.75);
+  }
+}
+
+td.success {
+  animation-name: shortestPath;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+  border: none;
+}
+
+@keyframes shortestPath {
+  0% {
+    transform: scale(0.6);
+    background-color: #FFFE6A;
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: #FFFE6A;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: #FFFE6A;
+  }
+}
+
+.start {
+	background-image: url(./media/triangletwo-right.svg);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	animation-name: specialNodes;
+	animation-duration: 2.0s;
+	animation-timing-function: ease-out;
+	animation-delay: 0;
+	animation-direction: alternate;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+	animation-play-state: running;
+}
+
+.target, .end {
+	background-image: url(./media/circle.svg);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	animation-name: specialNodes;
+	animation-duration: 2.0s;
+	animation-timing-function: ease-out;
+	animation-delay: 0;
+	animation-direction: alternate;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+	animation-play-state: running;
+}
+
+@keyframes specialNodes {
+  0% {
+    transform: scale(.3);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1.0);
+  }
+}
+
+#infoModalBtn {
+	margin-left: 20px;
+}
+
+.fun-fact {
+	color: #28A745;
+}
+
+#result {
+	position: fixed;
+	right: 10px;
+	bottom: 10px;
+	width: 120px;
+	height: 87px;
+  padding: 0 10px;
+	font-size: 12px;
+	text-align: center;
+	color: #FFF;
+	background-color: #FFC107;
+	border: 1px dashed #000;
+}
+
+#resultIcon {
+	font-size: 16px;
+	padding-top: 6px;
+}
+
+#message {
+  font-weight: 600; 
+}
+
+@media (min-width: 768px) and (min-height: 1024px) {
+  td {
+    width: 35px;
+    height: 35px;
+  }
+
+  #keys {
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
+  }
+}
+
+@media (max-width: 1250px) {
+  #result {
+    display: none;
+  }
+}
