@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 
 * {
   box-sizing: border-box;
@@ -16,26 +16,24 @@ body {
 }
 
 #logo {
-	font-size: 30px;
+  font-size: 30px;
   transition: 0.3s color;
-  word-spacing: 0.3rem;
-  letter-spacing: 0.05rem;
 }
 
 #logo:hover {
-	cursor: default;
-	color: rgba(0, 217, 159, 0.75);
+  cursor: default;
+  color: rgba(0, 217, 159, 0.75);
 }
 
 #navbarSupportedContent .btn:not(:last-of-type) {
-	margin-right: 10px;
+  margin-right: 10px;
 }
 
 .key {
-	width: 20px;
+  width: 20px;
   height: 20px;
   margin-right: 10px;
-	border: 1px solid #79d9ce;
+  border: 1px solid #79d9ce;
 }
 
 div.start,
@@ -44,12 +42,12 @@ div.target {
 }
 
 div.success {
-	background-color: #FFFE6A;
+  background-color: #FFFE6A;
 }
 
 #tableContainer {
-	display: flex;
-	justify-content: center;
+  display: flex;
+  justify-content: center;
   padding: 0 20px;
   min-width: 900px;
 }
@@ -153,33 +151,33 @@ td.success {
 }
 
 .start {
-	background-image: url(./media/triangletwo-right.svg);
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: contain;
-	animation-name: specialNodes;
-	animation-duration: 2.0s;
-	animation-timing-function: ease-out;
-	animation-delay: 0;
-	animation-direction: alternate;
-	animation-iteration-count: 1;
-	animation-fill-mode: forwards;
-	animation-play-state: running;
+  background-image: url(./media/triangletwo-right.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  animation-name: specialNodes;
+  animation-duration: 2.0s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
 }
 
 .target, .end {
-	background-image: url(./media/circle.svg);
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: contain;
-	animation-name: specialNodes;
-	animation-duration: 2.0s;
-	animation-timing-function: ease-out;
-	animation-delay: 0;
-	animation-direction: alternate;
-	animation-iteration-count: 1;
-	animation-fill-mode: forwards;
-	animation-play-state: running;
+  background-image: url(./media/circle.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  animation-name: specialNodes;
+  animation-duration: 2.0s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
 }
 
 @keyframes specialNodes {
@@ -197,36 +195,32 @@ td.success {
 }
 
 #infoModalBtn {
-	margin-left: 20px;
+  margin-left: 20px;
 }
 
 .fun-fact {
-	color: #28A745;
+  color: #28A745;
 }
 
 #result {
-	position: fixed;
-	right: 10px;
-	bottom: 10px;
-	width: 120px;
-	height: 87px;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  width: 120px;
+  height: 87px;
   padding: 0 10px;
-	font-size: 12px;
-  font-weight: 900;
-	text-align: center;
-	color: #FFF;
-	background-color: #FFC107;
-	border: 1px dashed #000;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  color: #FFF;
+  background-color: #FFC107;
+  border: 1px dashed #000;
   letter-spacing: 0;
 }
 
 #resultIcon {
-	font-size: 16px;
-	padding-top: 6px;
-}
-
-#message {
-  font-weight: 700; 
+  font-size: 16px;
+  padding-top: 6px;
 }
 
 @media (min-width: 768px) and (min-height: 1024px) {
