@@ -9,8 +9,8 @@ const message = document.getElementById('message');
 const totalRows = 17;
 const totalCols = 38;
 
-let startCell = [12, 4];
-let targetCell = [4, 33];
+let startCell = [10, 12];
+let targetCell = [6, 25];
 let cellsToAnimate = [];
 let inProgress = false;
 let justFinished = false;
