@@ -1,6 +1,6 @@
 # Pathfinding Visualizer
 A visualization tool for pathfinding algorithms. <br>
-Check it out: https://fadiyousif.github.io/pathfinding-visualizer/er/
+Check it out: https://fadiyousif.github.io/pathfinding-visualizer/
 
 <img src="src/media/pathfinding.png" width="500">
 
