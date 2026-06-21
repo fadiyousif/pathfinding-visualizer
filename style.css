@@ -27,3 +27,35 @@ header h1 {
   color: #4f46e5;
   white-space: nowrap;
 }
+
+#grid-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  overflow: hidden;
+}
+
+#grid {
+  display: grid;
+  gap: 1px;
+  background: #cbd5e1;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  overflow: hidden;
+  user-select: none;
+  cursor: crosshair;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.cell {
+  width: 36px;
+  height: 36px;
+  background: #f8fafc;
+  position: relative;
+}
+
+.cell.start { background: #4f46e5; }
+.cell.end   { background: #10b981; }
+.cell.wall  { background: #334155; }
