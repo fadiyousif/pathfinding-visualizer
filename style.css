@@ -1,1 +1,29 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f0f2f5;
+  color: #1e293b;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+header {
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+header h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4f46e5;
+  white-space: nowrap;
+}
