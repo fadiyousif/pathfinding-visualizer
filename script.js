@@ -406,7 +406,7 @@ async function tracePath() {
 
   if (path[0] !== startNode) {
     playFailureSound();
-    setStatus('no path found', 'failure');
+    setStatus('No path found', 'failure');
     return;
   }
 
@@ -429,7 +429,7 @@ async function tracePath() {
     ? `${(elapsedMs / 1000).toFixed(1)}s`
     : `${elapsedMs}ms`;
 
-  setStatus(`path found — ${steps} ${steps === 1 ? 'step' : 'steps'} in ${timeStr}`, 'success');
+  setStatus(`Path found — ${steps} ${steps === 1 ? 'step' : 'steps'} in ${timeStr}`, 'success');
 }
 
 /*
@@ -472,7 +472,7 @@ async function dijkstra() {
   }
 
   playFailureSound();
-  setStatus('no path found', 'failure');
+  setStatus('No path found', 'failure');
 }
 
 /*
@@ -517,7 +517,7 @@ async function astar() {
   }
 
   playFailureSound();
-  setStatus('no path found', 'failure');
+  setStatus('No path found', 'failure');
 }
 
 /*
@@ -546,14 +546,14 @@ async function dfs() {
   }
 
   playFailureSound();
-  setStatus('no path found', 'failure');
+  setStatus('No path found', 'failure');
 }
 
 async function run() {
   if (isRunning) return;
   isRunning = true;
   [runBtn, clearBtn, clearPathBtn, mazeBtn].forEach(b => b.disabled = true);
-  setStatus('running…');
+  setStatus('Running…');
   resetSearch();
 
   runStartTime = performance.now();
@@ -568,7 +568,7 @@ async function run() {
 function clearPath() {
   if (isRunning) return;
   resetSearch();
-  setStatus('path cleared');
+  setStatus('Path cleared');
 }
 
 function clearAll() {
@@ -586,7 +586,7 @@ function clearAll() {
     }
   }
 
-  setStatus('grid cleared');
+  setStatus('Grid cleared');
 }
 
 /*
@@ -633,7 +633,7 @@ function generateMaze() {
     }
   }
 
-  setStatus('maze generated');
+  setStatus('Maze generated');
 }
 
 runBtn.addEventListener('click', run);
