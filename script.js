@@ -6,9 +6,12 @@ let isRunning = false;
 let mouseMode = null;
 let isMouseDown = false;
 
-const gridEl   = document.getElementById('grid');
-const runBtn   = document.getElementById('run-btn');
-const statusEl = document.getElementById('status');
+const gridEl      = document.getElementById('grid');
+const runBtn      = document.getElementById('run-btn');
+const clearBtn    = document.getElementById('clear-btn');
+const clearPathBtn = document.getElementById('clear-path-btn');
+const mazeBtn     = document.getElementById('maze-btn');
+const statusEl    = document.getElementById('status');
 
 /* each cell in the grid is represented as a node object.
  * r/c = row/column position in the grid.
@@ -324,7 +327,7 @@ async function dfs() {
 async function run() {
   if (isRunning) return;
   isRunning = true;
-  runBtn.disabled = true;
+  [runBtn, clearBtn, clearPathBtn, mazeBtn].forEach(b => b.disabled = true);
   statusEl.textContent = 'running…';
   resetSearch();
 
@@ -332,9 +335,83 @@ async function run() {
   await algoMap[document.getElementById('algo-select').value]();
 
   isRunning = false;
-  runBtn.disabled = false;
+  [runBtn, clearBtn, clearPathBtn, mazeBtn].forEach(b => b.disabled = false);
+}
+
+function clearPath() {
+  if (isRunning) return;
+  resetSearch();
+  statusEl.textContent = 'path cleared';
+}
+
+function clearAll() {
+  if (isRunning) return;
+
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const node = grid[r][c];
+      node.isWall = false;
+      node.visited = false;
+      node.prev = null;
+      node.g = Infinity;
+      node.f = Infinity;
+      setClass(node, baseClass(node));
+    }
+  }
+
+  statusEl.textContent = 'grid cleared';
+}
+
+/*
+ * recursive division maze: repeatedly picks a random wall line within a
+ * region and cuts a single passage through it, then recurses on each sub-region.
+ * alternates between horizontal and vertical cuts to produce a balanced maze.
+ */
+function generateMaze() {
+  if (isRunning) return;
+  clearAll();
+
+  const walls = [];
+
+  function divide(rStart, rEnd, cStart, cEnd, dir) {
+    if (rEnd - rStart < 2 || cEnd - cStart < 2) return;
+
+    if (dir === 'H') {
+      const wallR = rStart + 1 + 2 * Math.floor(Math.random() * Math.floor((rEnd - rStart - 1) / 2));
+      const passC = cStart + 2 * Math.floor(Math.random() * Math.ceil((cEnd - cStart + 1) / 2));
+
+      for (let c = cStart; c <= cEnd; c++)
+        if (c !== passC) walls.push(grid[wallR][c]);
+
+      divide(rStart, wallR - 1, cStart, cEnd, 'V');
+      divide(wallR + 1, rEnd,   cStart, cEnd, 'V');
+    } else {
+      const wallC = cStart + 1 + 2 * Math.floor(Math.random() * Math.floor((cEnd - cStart - 1) / 2));
+      const passR = rStart + 2 * Math.floor(Math.random() * Math.ceil((rEnd - rStart + 1) / 2));
+
+      for (let r = rStart; r <= rEnd; r++)
+        if (r !== passR) walls.push(grid[r][wallC]);
+
+      divide(rStart, rEnd, cStart, wallC - 1, 'H');
+      divide(rStart, rEnd, wallC + 1, cEnd,   'H');
+    }
+  }
+
+  divide(0, ROWS - 1, 0, COLS - 1, 'H');
+
+  for (const node of walls) {
+    if (node !== startNode && node !== endNode) {
+      node.isWall = true;
+      setClass(node, 'wall');
+    }
+  }
+
+  statusEl.textContent = 'maze generated';
 }
 
 runBtn.addEventListener('click', run);
+clearPathBtn.addEventListener('click', clearPath);
+clearBtn.addEventListener('click', clearAll);
+mazeBtn.addEventListener('click', generateMaze);
 
 buildGrid();
