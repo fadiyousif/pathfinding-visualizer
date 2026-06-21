@@ -167,8 +167,60 @@ input[type=range] {
   position: relative;
 }
 
-.cell.start   { background: var(--color-primary); }
-.cell.end     { background: #10b981; }
+/* icons are rendered via ::before/::after pseudo-elements so animations on
+ * the icon don't affect the cell background, and vice versa. */
+.cell.start { z-index: 1; }
+
+.cell.start::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/triangle-right.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: var(--icon-size) var(--icon-size);
+  animation: node-breathe 2s ease-in-out infinite;
+}
+
+.cell.end { z-index: 1; }
+
+.cell.end::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/circle.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: var(--icon-size) var(--icon-size);
+  animation: node-breathe 2s ease-in-out infinite 1s;
+}
+
+@keyframes node-breathe {
+  0%, 100% { transform: scale(1);    filter: brightness(1); }
+  50%       { transform: scale(1.12); filter: brightness(1.15); }
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
 .cell.wall {
   background: var(--color-cell-wall);
   animation: wall-thud 0.18s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
