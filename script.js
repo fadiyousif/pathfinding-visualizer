@@ -2,6 +2,8 @@ const ROWS = 14, COLS = 32;
 
 let grid = [];
 let startNode = null, endNode = null;
+let mouseMode = null;
+let isMouseDown = false;
 
 const gridEl = document.getElementById('grid');
 
@@ -64,6 +66,9 @@ function buildGrid() {
       node.el = el;
       grid[r][c] = node;
       gridEl.appendChild(el);
+
+      el.addEventListener('mousedown', e => onCellMouseDown(e, node));
+      el.addEventListener('mouseenter', () => onCellMouseEnter(node));
     }
   }
 
@@ -74,6 +79,57 @@ function buildGrid() {
 
   setClass(startNode, 'start');
   setClass(endNode, 'end');
+}
+
+/* we track mousedown/mouseup on the document rather than individual cells
+ * so that dragging outside the grid and releasing still clears the mode. */
+document.addEventListener('mousedown', () => { isMouseDown = true; });
+document.addEventListener('mouseup',   () => { isMouseDown = false; mouseMode = null; });
+
+function onCellMouseDown(e, node) {
+  e.preventDefault(); // prevent text selection while dragging
+
+  if (node === startNode) { mouseMode = 'move-start'; return; }
+  if (node === endNode)   { mouseMode = 'move-end';   return; }
+
+  // toggle wall on click; mouseMode determines what happens on subsequent drag
+  if (node.isWall) {
+    node.isWall = false;
+    setClass(node, '');
+    mouseMode = 'erase';
+  } else {
+    node.isWall = true;
+    setClass(node, 'wall');
+    mouseMode = 'wall';
+  }
+}
+
+function onCellMouseEnter(node) {
+  if (!isMouseDown) return;
+
+  if (mouseMode === 'move-start' && node !== endNode && !node.isWall) {
+    setClass(startNode, '');
+    startNode = node;
+    setClass(node, 'start');
+    return;
+  }
+
+  if (mouseMode === 'move-end' && node !== startNode && !node.isWall) {
+    setClass(endNode, '');
+    endNode = node;
+    setClass(node, 'end');
+    return;
+  }
+
+  if (mouseMode === 'wall' && node !== startNode && node !== endNode) {
+    node.isWall = true;
+    setClass(node, 'wall');
+  }
+
+  if (mouseMode === 'erase' && node !== startNode && node !== endNode) {
+    node.isWall = false;
+    setClass(node, '');
+  }
 }
 
 buildGrid();
