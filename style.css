@@ -1,9 +1,54 @@
+:root {
+  /* surfaces */
+  --color-bg:              #f0f2f5;
+  --color-surface:         #ffffff;
+  --color-border:          #e2e8f0;
+  --color-border-input:    #cbd5e1;
+
+  /* text */
+  --color-text:            #1e293b;
+  --color-text-muted:      #64748b;
+
+  /* primary (indigo) */
+  --color-primary:         #4f46e5;
+  --color-primary-hover:   #4338ca;
+
+  /* secondary */
+  --color-secondary-bg:    #f1f5f9;
+  --color-secondary-hover: #e2e8f0;
+  --color-secondary-text:  #334155;
+
+  /* danger */
+  --color-danger:          #ef4444;
+  --color-danger-hover:    #dc2626;
+
+  /* cells */
+  --color-cell-bg:         #f8fafc;
+  --color-cell-wall:       #334155;
+  --color-cell-wall-flash: #64748b;
+
+  /* visited */
+  --color-visited:         #a5b4fc;
+  --color-visited-mid:     #818cf8;
+  --color-visited-dark:    #6366f1;
+  --color-visited-start:   #e0e7ff;
+
+  /* path */
+  --color-path:            #f59e0b;
+  --color-path-wave:       #fde68a;
+  --color-path-glow:       rgba(245, 158, 11, 0.45);
+
+  /* sizing */
+  --cell-size:             36px;
+  --icon-size:             30px;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #f0f2f5;
-  color: #1e293b;
+  background: var(--color-bg);
+  color: var(--color-text);
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -11,8 +56,8 @@ body {
 }
 
 header {
-  background: #fff;
-  border-bottom: 1px solid #e2e8f0;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
   padding: 10px 20px;
   display: flex;
   align-items: center;
@@ -24,7 +69,7 @@ header {
 header h1 {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #4f46e5;
+  color: var(--color-primary);
   white-space: nowrap;
 }
 
@@ -40,8 +85,8 @@ header h1 {
 #grid {
   display: grid;
   gap: 1px;
-  background: #cbd5e1;
-  border: 1px solid #cbd5e1;
+  background: var(--color-border-input);
+  border: 1px solid var(--color-border-input);
   border-radius: 8px;
   overflow: hidden;
   user-select: none;
@@ -50,12 +95,12 @@ header h1 {
 }
 
 .cell {
-  width: 36px;
-  height: 36px;
-  background: #f8fafc;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background: var(--color-cell-bg);
   position: relative;
 }
 
-.cell.start { background: #4f46e5; }
+.cell.start { background: var(--color-primary); }
 .cell.end   { background: #10b981; }
-.cell.wall  { background: #334155; }
+.cell.wall  { background: var(--color-cell-wall); }

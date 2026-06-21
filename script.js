@@ -43,9 +43,12 @@ function buildGrid() {
   gridEl.innerHTML = '';
 
   /* CSS Grid needs explicit column/row sizes — we set them here rather than
-   * hardcoding them in CSS so they're tied to ROWS/COLS and stay in sync. */
-  gridEl.style.gridTemplateColumns = `repeat(${COLS}, 36px)`;
-  gridEl.style.gridTemplateRows    = `repeat(${ROWS}, 36px)`;
+   * hardcoding them in CSS so they're tied to ROWS/COLS and stay in sync.
+   * reading --cell-size from the stylesheet keeps JS and CSS in sync if the
+   * value ever changes — no need to update it in two places. */
+  const cellSize = getComputedStyle(document.documentElement).getPropertyValue('--cell-size').trim();
+  gridEl.style.gridTemplateColumns = `repeat(${COLS}, ${cellSize})`;
+  gridEl.style.gridTemplateRows    = `repeat(${ROWS}, ${cellSize})`;
 
   for (let r = 0; r < ROWS; r++) {
     grid[r] = [];
