@@ -171,6 +171,7 @@ function setStatus(text, type = 'update') {
 
 // clears visited/path state without touching walls or node positions
 function resetSearch() {
+  endNode.el.classList.remove('found');
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
       const node = grid[r][c];
@@ -408,11 +409,14 @@ async function tracePath() {
     return;
   }
 
+  endNode.el.classList.add('found');
+  await sleep(1400); // wait for the end-found animation before drawing the path
+
   for (const n of path) await animatePath(n);
 
   // stagger a wave ripple across each path cell after the path is drawn
   path.forEach((n, i) => {
-    if (n === startNode || n === endNode) return;
+    if (n === startNode) return;
     n.el.style.setProperty('--wave-delay', `${i * 20}ms`);
     n.el.classList.add('wave');
   });
