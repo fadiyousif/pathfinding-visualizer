@@ -157,6 +157,16 @@ function getNeighbors(node) {
     .filter(n => n && !n.isWall);
 }
 
+/* type = 'update' | 'success' | 'failure'
+ * voiding offsetWidth forces a reflow so the animation restarts even if
+ * the same class was already on the element. */
+function setStatus(text, type = 'update') {
+  statusEl.textContent = text;
+  statusEl.className = '';
+  void statusEl.offsetWidth;
+  statusEl.className = type;
+}
+
 // clears visited/path state without touching walls or node positions
 function resetSearch() {
   for (let r = 0; r < ROWS; r++) {
@@ -208,7 +218,7 @@ async function tracePath() {
   while (cur) { path.unshift(cur); cur = cur.prev; }
 
   if (path[0] !== startNode) {
-    statusEl.textContent = 'no path found';
+    setStatus('no path found', 'failure');
     return;
   }
 
@@ -222,7 +232,7 @@ async function tracePath() {
   });
 
   const steps = path.length - 1;
-  statusEl.textContent = `path found — ${steps} ${steps === 1 ? 'step' : 'steps'}`;
+  setStatus(`path found — ${steps} ${steps === 1 ? 'step' : 'steps'}`, 'success');
 }
 
 /*
@@ -264,7 +274,7 @@ async function dijkstra() {
     }
   }
 
-  statusEl.textContent = 'no path found';
+  setStatus('no path found', 'failure');
 }
 
 /*
@@ -308,7 +318,7 @@ async function astar() {
     }
   }
 
-  statusEl.textContent = 'no path found';
+  setStatus('no path found', 'failure');
 }
 
 /*
@@ -336,14 +346,14 @@ async function dfs() {
     }
   }
 
-  statusEl.textContent = 'no path found';
+  setStatus('no path found', 'failure');
 }
 
 async function run() {
   if (isRunning) return;
   isRunning = true;
   [runBtn, clearBtn, clearPathBtn, mazeBtn].forEach(b => b.disabled = true);
-  statusEl.textContent = 'running…';
+  setStatus('running…');
   resetSearch();
 
   const algoMap = { dijkstra, astar, dfs };
@@ -356,7 +366,7 @@ async function run() {
 function clearPath() {
   if (isRunning) return;
   resetSearch();
-  statusEl.textContent = 'path cleared';
+  setStatus('path cleared');
 }
 
 function clearAll() {
@@ -374,7 +384,7 @@ function clearAll() {
     }
   }
 
-  statusEl.textContent = 'grid cleared';
+  setStatus('grid cleared');
 }
 
 /*
@@ -421,7 +431,7 @@ function generateMaze() {
     }
   }
 
-  statusEl.textContent = 'maze generated';
+  setStatus('maze generated');
 }
 
 runBtn.addEventListener('click', run);

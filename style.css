@@ -139,6 +139,41 @@ input[type=range] {
   display: inline-block;
 }
 
+/* void offsetWidth forces a reflow so re-adding the same class
+ * still triggers the animation even if it was already set. */
+#status.update {
+  animation: status-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+#status.success {
+  animation: status-success 1.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+#status.failure {
+  animation: status-failure 0.55s ease forwards;
+}
+
+@keyframes status-in {
+  0%   { opacity: 0; transform: translateY(6px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes status-success {
+  0%   { opacity: 0; transform: scale(0.8);  color: #16a34a; }
+  25%  { opacity: 1; transform: scale(1.25); color: #16a34a; }
+  55%  { transform: scale(1.1);  color: #16a34a; }
+  100% { transform: scale(1);    color: var(--color-text-muted); }
+}
+
+@keyframes status-failure {
+  0%   { transform: translateX(0);    color: var(--color-danger); }
+  20%  { transform: translateX(-7px); }
+  40%  { transform: translateX(7px);  }
+  60%  { transform: translateX(-4px); }
+  80%  { transform: translateX(4px);  }
+  100% { transform: translateX(0);    color: var(--color-danger); }
+}
+
 #grid-container {
   flex: 1;
   display: flex;
