@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="4" fill="#f0f2f5"/>
+
+  <!-- 4x4 grid: cell size 7px, gap 0.5px, offset 1.5px -->
+  <!-- empty cells -->
+  <rect x="1.5"  y="9"    width="7" height="7" rx="1.5" fill="#e2e8f0"/>
+  <rect x="24"   y="9"    width="7" height="7" rx="1.5" fill="#e2e8f0"/>
+  <rect x="1.5"  y="16.5" width="7" height="7" rx="1.5" fill="#e2e8f0"/>
+  <rect x="9"    y="16.5" width="7" height="7" rx="1.5" fill="#e2e8f0"/>
+  <rect x="24"   y="16.5" width="7" height="7" rx="1.5" fill="#e2e8f0"/>
+  <rect x="1.5"  y="24"   width="7" height="7" rx="1.5" fill="#e2e8f0"/>
+  <rect x="9"    y="24"   width="7" height="7" rx="1.5" fill="#e2e8f0"/>
+  <rect x="16.5" y="24"   width="7" height="7" rx="1.5" fill="#e2e8f0"/>
+  <rect x="24"   y="24"   width="7" height="7" rx="1.5" fill="#e2e8f0"/>
+
+  <!-- wall cells -->
+  <rect x="24"  y="1.5" width="7" height="7" rx="1.5" fill="#334155"/>
+  <rect x="9"   y="9"   width="7" height="7" rx="1.5" fill="#334155"/>
+
+  <!-- path cells (amber) -->
+  <rect x="9"    y="1.5" width="7" height="7" rx="1.5" fill="#f59e0b"/>
+  <rect x="16.5" y="1.5" width="7" height="7" rx="1.5" fill="#f59e0b"/>
+  <rect x="16.5" y="9"   width="7" height="7" rx="1.5" fill="#f59e0b"/>
+  <rect x="16.5" y="16.5" width="7" height="7" rx="1.5" fill="#f59e0b"/>
+
+  <!-- start node (indigo) -->
+  <rect x="1.5" y="1.5" width="7" height="7" rx="1.5" fill="#4f46e5"/>
+
+  <!-- end node (amber + circle marker) -->
+  <rect x="24" y="16.5" width="7" height="7" rx="1.5" fill="#f59e0b"/>
+  <circle cx="27.5" cy="20" r="1.8" fill="#1e293b"/>
+</svg>
