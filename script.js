@@ -293,6 +293,34 @@ async function astar() {
   statusEl.textContent = 'no path found';
 }
 
+/*
+ * DFS: explores as deep as possible before backtracking, using a stack.
+ * fast to find *a* path but it won't be the shortest one — DFS has no
+ * concept of distance, it just keeps going until it hits a dead end.
+ */
+async function dfs() {
+  const stack = [startNode];
+
+  while (stack.length) {
+    const cur = stack.pop();
+
+    if (cur.visited) continue;
+    cur.visited = true;
+    await animateVisited(cur);
+
+    if (cur === endNode) { await tracePath(); return; }
+
+    for (const nb of getNeighbors(cur)) {
+      if (!nb.visited) {
+        nb.prev = cur;
+        stack.push(nb);
+      }
+    }
+  }
+
+  statusEl.textContent = 'no path found';
+}
+
 async function run() {
   if (isRunning) return;
   isRunning = true;
@@ -300,7 +328,7 @@ async function run() {
   statusEl.textContent = 'running…';
   resetSearch();
 
-  const algoMap = { dijkstra, astar };
+  const algoMap = { dijkstra, astar, dfs };
   await algoMap[document.getElementById('algo-select').value]();
 
   isRunning = false;
