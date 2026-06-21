@@ -418,7 +418,7 @@ async function tracePath() {
 
   // stagger a wave ripple across each path cell after the path is drawn
   path.forEach((n, i) => {
-    if (n === startNode) return;
+    if (n === startNode || n === endNode) return;
     n.el.style.setProperty('--wave-delay', `${i * 20}ms`);
     n.el.classList.add('wave');
   });
