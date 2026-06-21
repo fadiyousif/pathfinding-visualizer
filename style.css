@@ -122,6 +122,16 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .btn-danger:hover { background: var(--color-danger-hover); }
 
+.speed-label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+input[type=range] {
+  accent-color: var(--color-primary);
+  width: 80px;
+}
+
 #status {
   font-size: 0.8rem;
   color: var(--color-text-muted);

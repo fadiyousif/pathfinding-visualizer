@@ -6,12 +6,18 @@ let isRunning = false;
 let mouseMode = null;
 let isMouseDown = false;
 
-const gridEl      = document.getElementById('grid');
-const runBtn      = document.getElementById('run-btn');
-const clearBtn    = document.getElementById('clear-btn');
+const gridEl       = document.getElementById('grid');
+const runBtn       = document.getElementById('run-btn');
+const clearBtn     = document.getElementById('clear-btn');
 const clearPathBtn = document.getElementById('clear-path-btn');
-const mazeBtn     = document.getElementById('maze-btn');
-const statusEl    = document.getElementById('status');
+const mazeBtn      = document.getElementById('maze-btn');
+const statusEl     = document.getElementById('status');
+const speedSlider  = document.getElementById('speed');
+
+// maps slider value 1–5 to a delay in ms (slower → higher delay)
+function getDelay() {
+  return [60, 30, 15, 5, 1][parseInt(speedSlider.value) - 1];
+}
 
 /* each cell in the grid is represented as a node object.
  * r/c = row/column position in the grid.
@@ -179,7 +185,7 @@ function sleep(ms) {
 async function animateVisited(node) {
   if (node === startNode || node === endNode) return;
   node.el.classList.add('visited');
-  await sleep(30);
+  await sleep(getDelay());
 }
 
 async function animatePath(node) {
