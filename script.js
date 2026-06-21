@@ -3,6 +3,7 @@ const ROWS = 14, COLS = 32;
 let grid = [];
 let startNode = null, endNode = null;
 let isRunning = false;
+let runStartTime = 0;
 let mouseMode = null;
 let isMouseDown = false;
 
@@ -422,8 +423,13 @@ async function tracePath() {
   });
 
   const steps = path.length - 1;
+  const elapsedMs = Math.round(performance.now() - runStartTime);
+  const timeStr   = elapsedMs >= 1000
+    ? `${(elapsedMs / 1000).toFixed(1)}s`
+    : `${elapsedMs}ms`;
+
   playSuccessSound();
-  setStatus(`path found — ${steps} ${steps === 1 ? 'step' : 'steps'}`, 'success');
+  setStatus(`path found — ${steps} ${steps === 1 ? 'step' : 'steps'} in ${timeStr}`, 'success');
 }
 
 /*
@@ -549,6 +555,8 @@ async function run() {
   [runBtn, clearBtn, clearPathBtn, mazeBtn].forEach(b => b.disabled = true);
   setStatus('running…');
   resetSearch();
+
+  runStartTime = performance.now();
 
   const algoMap = { dijkstra, astar, dfs };
   await algoMap[document.getElementById('algo-select').value]();
