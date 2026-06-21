@@ -115,6 +115,7 @@ function onCellMouseDown(e, node) {
   } else {
     node.isWall = true;
     setClass(node, 'wall');
+    playWallDrawSound();
     mouseMode = 'wall';
   }
 }
@@ -139,6 +140,7 @@ function onCellMouseEnter(node) {
   if (mouseMode === 'wall' && node !== startNode && node !== endNode) {
     node.isWall = true;
     setClass(node, 'wall');
+    playWallDrawSound();
   }
 
   if (mouseMode === 'erase' && node !== startNode && node !== endNode) {
@@ -184,6 +186,187 @@ function resetSearch() {
   }
 }
 
+/* all sounds share a single AudioContext — browsers limit how many you can
+ * create and will start refusing new ones if you make too many. lazy-init
+ * it here so it's only created on first use (after a user gesture). */
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playMazeSound() {
+  const ctx      = getAudioCtx();
+  const duration = 0.5;
+
+  // white noise filtered through a rising bandpass sweep
+  const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+  const data   = buffer.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.setValueAtTime(400, ctx.currentTime);
+  filter.frequency.linearRampToValueAtTime(1200, ctx.currentTime + duration);
+  filter.Q.value = 1.5;
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.05);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+  source.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+  source.start();
+  source.stop(ctx.currentTime + duration);
+}
+
+/* throttled sounds — these fire per cell so we cap how often they play
+ * to avoid flooding the audio graph with hundreds of oscillators. */
+let lastTickTime = 0;
+
+function playTickSound() {
+  const now = performance.now();
+  if (now - lastTickTime < 40) return;
+  lastTickTime = now;
+
+  const ctx  = getAudioCtx();
+  const osc  = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = 'sine';
+  osc.frequency.value = 600;
+  const t = ctx.currentTime;
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(0.08, t + 0.005);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+  osc.start(t);
+  osc.stop(t + 0.04);
+}
+
+let lastPathTickTime = 0;
+
+function playPathSound() {
+  const now = performance.now();
+  if (now - lastPathTickTime < 40) return;
+  lastPathTickTime = now;
+
+  const ctx  = getAudioCtx();
+  const osc  = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = 'sine';
+  osc.frequency.value = 880;
+  const t = ctx.currentTime;
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(0.12, t + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+  osc.start(t);
+  osc.stop(t + 0.08);
+}
+
+function playClearPathSound() {
+  const ctx  = getAudioCtx();
+  const osc  = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(500, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(250, ctx.currentTime + 0.2);
+  const t = ctx.currentTime;
+  gain.gain.setValueAtTime(0.12, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+  osc.start(t);
+  osc.stop(t + 0.2);
+}
+
+function playClearAllSound() {
+  const ctx = getAudioCtx();
+
+  // three descending tones, staggered 100ms apart
+  [500, 350, 200].forEach((freq, i) => {
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    const t = ctx.currentTime + i * 0.1;
+    gain.gain.setValueAtTime(0.1, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+    osc.start(t);
+    osc.stop(t + 0.15);
+  });
+}
+
+function playFailureSound() {
+  // descending minor third: A4 → F4 → D4
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  [440, 349.23, 293.66].forEach((freq, i) => {
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.value = freq;
+    const t = ctx.currentTime + i * 0.18;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.05, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+    osc.start(t);
+    osc.stop(t + 0.4);
+  });
+}
+
+function playSuccessSound() {
+  // C major arpeggio: C5 → E5 → G5 → C6
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    const t = ctx.currentTime + i * 0.13;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.25, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    osc.start(t);
+    osc.stop(t + 0.35);
+  });
+}
+
+let lastWallDrawTime = 0;
+
+function playWallDrawSound() {
+  const now = performance.now();
+  if (now - lastWallDrawTime < 30) return;
+  lastWallDrawTime = now;
+
+  const ctx  = getAudioCtx();
+  const osc  = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(180, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(60, ctx.currentTime + 0.08);
+  const t = ctx.currentTime;
+  gain.gain.setValueAtTime(0.15, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+  osc.start(t);
+  osc.stop(t + 0.08);
+}
+
 /* the browser renders frames between JS tasks, not during them. If we colored
  * every cell synchronously the whole grid would appear at once with no animation.
  * sleep() pauses execution by returning a Promise that resolves after a timeout,
@@ -197,6 +380,7 @@ function sleep(ms) {
 async function animateVisited(node) {
   if (node === startNode || node === endNode) return;
   node.el.classList.add('visited');
+  playTickSound();
   await sleep(getDelay());
 }
 
@@ -204,6 +388,7 @@ async function animatePath(node) {
   if (node === startNode || node === endNode) return;
   node.el.classList.remove('visited');
   node.el.classList.add('path');
+  playPathSound();
   await sleep(30);
 }
 
@@ -218,6 +403,7 @@ async function tracePath() {
   while (cur) { path.unshift(cur); cur = cur.prev; }
 
   if (path[0] !== startNode) {
+    playFailureSound();
     setStatus('no path found', 'failure');
     return;
   }
@@ -232,6 +418,7 @@ async function tracePath() {
   });
 
   const steps = path.length - 1;
+  playSuccessSound();
   setStatus(`path found — ${steps} ${steps === 1 ? 'step' : 'steps'}`, 'success');
 }
 
@@ -274,6 +461,7 @@ async function dijkstra() {
     }
   }
 
+  playFailureSound();
   setStatus('no path found', 'failure');
 }
 
@@ -318,6 +506,7 @@ async function astar() {
     }
   }
 
+  playFailureSound();
   setStatus('no path found', 'failure');
 }
 
@@ -346,6 +535,7 @@ async function dfs() {
     }
   }
 
+  playFailureSound();
   setStatus('no path found', 'failure');
 }
 
@@ -435,8 +625,8 @@ function generateMaze() {
 }
 
 runBtn.addEventListener('click', run);
-clearPathBtn.addEventListener('click', clearPath);
-clearBtn.addEventListener('click', clearAll);
-mazeBtn.addEventListener('click', generateMaze);
+clearPathBtn.addEventListener('click', () => { playClearPathSound(); clearPath(); });
+clearBtn.addEventListener('click', () => { playClearAllSound(); clearAll(); });
+mazeBtn.addEventListener('click', () => { playMazeSound(); generateMaze(); });
 
 buildGrid();
