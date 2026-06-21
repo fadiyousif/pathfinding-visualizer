@@ -249,6 +249,50 @@ async function dijkstra() {
   statusEl.textContent = 'no path found';
 }
 
+/*
+ * A*: like Dijkstra's but adds a heuristic estimate of the remaining distance
+ * to the goal. nodes are prioritized by f = g + h, where g is the known cost
+ * from the start and h is the heuristic (Manhattan distance here).
+ * this focuses the search toward the goal and is much faster in practice,
+ * while still guaranteeing the shortest path as long as h never overestimates.
+ */
+function heuristic(a, b) {
+  // Manhattan distance — counts grid steps ignoring diagonals
+  return Math.abs(a.r - b.r) + Math.abs(a.c - b.c);
+}
+
+async function astar() {
+  startNode.g = 0;
+  startNode.f = heuristic(startNode, endNode);
+
+  const open = [startNode];
+
+  while (open.length) {
+    open.sort((a, b) => a.f - b.f);
+    const cur = open.shift();
+
+    if (cur.visited) continue;
+    cur.visited = true;
+    await animateVisited(cur);
+
+    if (cur === endNode) { await tracePath(); return; }
+
+    for (const nb of getNeighbors(cur)) {
+      if (nb.visited) continue;
+      const tentG = cur.g + 1;
+
+      if (tentG < nb.g) {
+        nb.prev = cur;
+        nb.g = tentG;
+        nb.f = nb.g + heuristic(nb, endNode);
+        open.push(nb);
+      }
+    }
+  }
+
+  statusEl.textContent = 'no path found';
+}
+
 async function run() {
   if (isRunning) return;
   isRunning = true;
@@ -256,7 +300,8 @@ async function run() {
   statusEl.textContent = 'running…';
   resetSearch();
 
-  await dijkstra();
+  const algoMap = { dijkstra, astar };
+  await algoMap[document.getElementById('algo-select').value]();
 
   isRunning = false;
   runBtn.disabled = false;
