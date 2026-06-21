@@ -410,6 +410,7 @@ async function tracePath() {
     return;
   }
 
+  playSuccessSound();
   endNode.el.classList.add('found');
   await sleep(1400); // wait for the end-found animation before drawing the path
 
@@ -428,7 +429,6 @@ async function tracePath() {
     ? `${(elapsedMs / 1000).toFixed(1)}s`
     : `${elapsedMs}ms`;
 
-  playSuccessSound();
   setStatus(`path found — ${steps} ${steps === 1 ? 'step' : 'steps'} in ${timeStr}`, 'success');
 }
 
