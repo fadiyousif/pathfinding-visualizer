@@ -41,6 +41,8 @@ function makeNode(r, c) {
  * we don't have to track and remove old classes manually. */
 function setClass(node, cls) {
   node.el.className = 'cell' + (cls ? ' ' + cls : '');
+  // clear wave-delay so it doesn't linger when the cell gets reused
+  node.el.style.removeProperty('--wave-delay');
 }
 
 /* returns what class a node should have based on its current state.
@@ -211,6 +213,13 @@ async function tracePath() {
   }
 
   for (const n of path) await animatePath(n);
+
+  // stagger a wave ripple across each path cell after the path is drawn
+  path.forEach((n, i) => {
+    if (n === startNode || n === endNode) return;
+    n.el.style.setProperty('--wave-delay', `${i * 20}ms`);
+    n.el.classList.add('wave');
+  });
 
   const steps = path.length - 1;
   statusEl.textContent = `path found — ${steps} ${steps === 1 ? 'step' : 'steps'}`;

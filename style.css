@@ -189,6 +189,19 @@ input[type=range] {
   box-shadow: 0 0 6px 2px var(--color-path-glow);
 }
 
+/* wave is added after the path is fully drawn to create a ripple effect.
+ * --wave-delay is set inline per cell so the animation staggers along the path. */
+.cell.path.wave {
+  animation: path-wave 0.4s ease forwards;
+  animation-delay: var(--wave-delay, 0ms);
+}
+
+@keyframes path-wave {
+  0%   { transform: scale(1);    filter: brightness(1); }
+  40%  { transform: scale(1.25); filter: brightness(1.4); background: var(--color-path-wave); }
+  100% { transform: scale(1);    filter: brightness(1);  background: var(--color-path); }
+}
+
 @keyframes visited-anim {
   0% {
     transform: scale(0) rotate(-180deg);
